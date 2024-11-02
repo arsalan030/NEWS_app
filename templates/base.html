@@ -1,0 +1,55 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Newspaper App{% endblock title %}</title>
+    {% load static %}
+    <!-- Link to your CSS file -->
+    <!-- <link rel="stylesheet" href="{% static 'templates/registration/static/styles.css' %}"> -->
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header>
+        <nav>
+        
+            <div class="container">
+                <h1><a href="/">NewsApp</a></h1>
+                <ul class="nav-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/world">World</a></li>
+                    <li><a href="/politics">Politics</a></li>
+                    <li><a href="/business">Business</a></li>
+                    <li><a href="/technology">Technology</a></li>
+                    <li><a href="/sports">Sports</a></li>
+                    <!-- Show "New" link if user is authenticated -->
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'article_new' %}" class="nav-link px-2 link-dark">+ New</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        {% block content %}
+        <!-- Content goes here in child templates -->
+        {% endblock content %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; {{ year|default:"2024" }} NewsApp - All rights reserved.</p>
+            <ul class="footer-links">
+                <li><a href="/about">About Us</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/privacy-policy">Privacy Policy</a></li>
+            </ul>
+        </div>
+    </footer>
+
+</body>
+</html>
