@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-*)#icm4$8*o3^^f$854&(pyhoamr(%mqo#tx$g-u09qh25gk5_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [".herokuapp.com", "localhost", "127.0.0.1"]
+
 
 
 # Application definition
@@ -149,3 +150,7 @@ from pathlib import Path
 from environs import Env # new
 env = Env() # new
 env.read_env()
+DEBUG = env.bool("DEBUG")
+ANYTHING=True
+DEBUG = env.bool("ANYTHING")
+DEBUG = env.bool("DEBUG", default=False)
