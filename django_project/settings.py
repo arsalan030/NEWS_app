@@ -18,13 +18,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+from pathlib import Path
+from environs import Env # new
+env = Env() # new
+env.read_env()
+DEBUG = env.bool("DEBUG", default=False)
+
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*)#icm4$8*o3^^f$854&(pyhoamr(%mqo#tx$g-u09qh25gk5_'
+SECRET_KEY = env.str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+DEBUG = False
 ALLOWED_HOSTS = [".herokuapp.com", "localhost", "127.0.0.1"]
 
 
@@ -37,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    "whitenoise.runserver_nostatic",
     'django.contrib.staticfiles',
     "accounts.apps.AccountsConfig",
     "crispy_forms", # new
@@ -51,11 +58,13 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'django_project.urls'
@@ -83,10 +92,7 @@ WSGI_APPLICATION = 'django_project.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+"default": env.dj_db_url("DATABASE_URL")
 }
 
 
@@ -146,11 +152,10 @@ EMAIL_HOST_PASSWORD = "SG.83NiqgY_T5KbU3vgUsZrMw.v37ryyyi58_MhFo_X44EC8FvecAabHr
 EMAIL_PORT = 587  # TLS port
 EMAIL_USE_TLS = True  # Use TLS on port 587
 
-from pathlib import Path
-from environs import Env # new
-env = Env() # new
-env.read_env()
-DEBUG = env.bool("DEBUG")
-ANYTHING=True
-DEBUG = env.bool("ANYTHING")
-DEBUG = env.bool("DEBUG", default=False)
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"] # new
+STATIC_ROOT = BASE_DIR / "staticfiles" # new
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+
